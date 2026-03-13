@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Richiedi un sopralluogo | SPLit 9</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="/">SPLit 9</a>
+        <nav class="nav">
+          <a href="/">Home</a>
+          <a href="/diventa-tecnico">Diventa tecnico</a>
+        </nav>
+        <div class="nav-cta">
+          <a class="button button-outline" href="/">Torna alla landing</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="form-page">
+      <div class="container form-shell">
+        <aside class="highlight-box">
+          <p class="helper">Richiesta sopralluogo</p>
+          <h1 class="section-title">Attiva un tecnico locale per il rilievo</h1>
+          <p>
+            Compila il modulo con i dati essenziali. In questa fase il team prenderà in carico la richiesta manualmente.
+          </p>
+          <div class="stats">
+            <div class="stat">
+              <strong>Dati minimi</strong>
+              <p>Studio, contatto, indirizzo, tipo intervento e urgenza.</p>
+            </div>
+            <div class="stat">
+              <strong>Flusso rapido</strong>
+              <p>Nessuna autenticazione: il form invia direttamente la richiesta al database.</p>
+            </div>
+          </div>
+        </aside>
+
+        <section class="form-panel">
+          <p class="helper">POST /api/sopralluoghi</p>
+          <h2>Richiedi un sopralluogo</h2>
+          <form data-api-form data-form-type="sopralluogo" data-endpoint="/api/sopralluoghi" data-button-label="Invia richiesta">
+            <div class="form-grid">
+              <label>
+                <span>Nome studio</span>
+                <input type="text" name="nomeStudio" required />
+              </label>
+              <label>
+                <span>Email</span>
+                <input type="email" name="email" required />
+              </label>
+              <label>
+                <span>Telefono</span>
+                <input type="tel" name="telefono" required />
+              </label>
+              <label>
+                <span>Tipo sopralluogo</span>
+                <input type="text" name="tipoSopralluogo" placeholder="Rilievo, verifica immobile, stato avanzamento..." required />
+              </label>
+              <label class="full">
+                <span>Indirizzo</span>
+                <input type="text" name="indirizzo" required />
+              </label>
+              <label>
+                <span>Urgenza</span>
+                <select name="urgenza" required>
+                  <option value="">Seleziona</option>
+                  <option value="bassa">Bassa</option>
+                  <option value="media">Media</option>
+                  <option value="alta">Alta</option>
+                </select>
+              </label>
+              <label class="full">
+                <span>Note</span>
+                <textarea name="note" placeholder="Vincoli operativi, orari preferiti, dettagli del sopralluogo"></textarea>
+              </label>
+            </div>
+            <button type="submit">Invia richiesta</button>
+            <div class="form-feedback" data-feedback aria-live="polite"></div>
+          </form>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <span>SPLit 9 MVP</span>
+        <span>Richieste archiviate tramite API REST.</span>
+      </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+  </body>
+</html>

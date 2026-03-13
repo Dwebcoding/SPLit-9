@@ -356,6 +356,10 @@ label {
   font-weight: 600;
 }
 
+.form-panel button[type="submit"] {
+  margin-top: 1.5rem;
+}
+
 input,
 select,
 textarea {

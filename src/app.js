@@ -9,9 +9,6 @@ const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 const app = express();
 const publicDir = path.join(__dirname, 'public');
 
-console.log('Static publicDir =', publicDir);
-console.log('app __dirname =', __dirname);
-console.log('process.cwd() =', process.cwd());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

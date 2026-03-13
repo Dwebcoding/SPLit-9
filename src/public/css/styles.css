@@ -83,9 +83,13 @@ a {
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   font-size: 1.15rem;
   font-weight: 700;
   letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
 .nav {
@@ -94,6 +98,12 @@ a {
   gap: 1.25rem;
   color: var(--muted);
   font-size: 0.95rem;
+}
+
+.brand-subtitle {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--muted);
 }
 
 .nav-cta {

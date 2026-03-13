@@ -63,3 +63,131 @@ async function handleFormSubmit(event) {
 document.querySelectorAll('[data-api-form]').forEach((form) => {
   form.addEventListener('submit', handleFormSubmit);
 });
+
+function initScrollAnimations() {
+  const animated = document.querySelectorAll('[data-animate]');
+  if (!animated.length || typeof IntersectionObserver === 'undefined') return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.18 }
+  );
+
+  animated.forEach((el) => observer.observe(el));
+}
+
+async function initSavingsChart() {
+  const canvas = document.getElementById('savingsChart');
+  if (!canvas || typeof Chart === 'undefined') return;
+
+  const fallbackData = [120, 180, 240];
+  const dataset = {
+    label: 'Risparmio stimato totale (€)',
+    data: fallbackData,
+    backgroundColor: ['rgba(181, 82, 51, 0.7)', 'rgba(31, 111, 120, 0.7)', 'rgba(99, 102, 241, 0.7)'],
+    borderRadius: 8,
+    borderWidth: 0
+  };
+
+  const config = {
+    type: 'bar',
+    data: {
+      labels: ['Benzina', 'Pernottamento', 'Ore di viaggio'],
+      datasets: [dataset]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          callbacks: {
+            label: (context) => `${context.dataset.label}: €${context.parsed.y}`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { color: '#5a5a5a' }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: { color: '#5a5a5a', stepSize: 50 },
+          grid: { color: 'rgba(217, 212, 203, 0.6)' }
+        }
+      }
+    }
+  };
+
+  const chart = new Chart(canvas, config);
+
+  try {
+    const response = await fetch('/api/metriche');
+    if (!response.ok) throw new Error('Impossibile recuperare le metriche');
+
+    const json = await response.json();
+    const savings = json.savings;
+
+    if (savings && typeof savings === 'object') {
+      chart.data.datasets[0].data = [savings.benzina, savings.pernottamento, savings.oreViaggio];
+      chart.update();
+    }
+
+    if (json.sopralluoghi != null) {
+      const el = document.getElementById('metricSopralluoghi');
+      if (el) el.textContent = json.sopralluoghi.toLocaleString();
+    }
+
+    if (json.tecnici != null) {
+      const el = document.getElementById('metricTecnici');
+      if (el) el.textContent = json.tecnici.toLocaleString();
+    }
+  } catch (error) {
+    // keep fallback data if fetch fails
+    console.warn('Impossibile caricare metriche:', error.message);
+  }
+}
+
+function initHeaderScrollBehavior() {
+  const header = document.querySelector('.site-header');
+  if (!header) return;
+
+  let lastScrollY = window.scrollY;
+  let ticking = false;
+
+  const updateHeader = () => {
+    const currentY = window.scrollY;
+    const isScrollingDown = currentY > lastScrollY;
+
+    // show/hide header on scroll direction
+    header.classList.toggle('hidden', isScrollingDown && currentY > 80);
+
+    // apply solid background when user scrolls past the hero
+    header.classList.toggle('scrolled', currentY > 40);
+
+    lastScrollY = currentY;
+    ticking = false;
+  };
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateHeader);
+      ticking = true;
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initScrollAnimations();
+  initSavingsChart();
+  initHeaderScrollBehavior();
+});

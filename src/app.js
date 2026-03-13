@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const pagesRouter = require('./routes/pages');
 const sopralluoghiRouter = require('./routes/sopralluoghi');
 const tecniciRouter = require('./routes/tecnici');
+const metricheRouter = require('./routes/metriche');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 
 const app = express();
@@ -21,6 +22,7 @@ app.get('/api/health', (req, res) => {
 app.use(pagesRouter);
 app.use('/api/sopralluoghi', sopralluoghiRouter);
 app.use('/api/tecnici', tecniciRouter);
+app.use('/api/metriche', metricheRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
